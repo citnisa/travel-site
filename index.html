@@ -5,46 +5,87 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Alpii Switzerland</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Poppins:wght@300;400;600&family=Raleway:wght@300;700&display=swap" rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
 
-  <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: TravelTime
-  * Template URL: https://bootstrapmade.com/traveltime-bootstrap-travel-template/
-  * Updated: Jul 28 2025 with Bootstrap v5.3.7
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <style>
+    /* --- Map & Side Panel Custom Styles --- */
+    #map-container {
+      height: 600px;
+      width: 100%;
+      border-radius: 20px;
+      z-index: 1;
+    }
+
+    #side-panel {
+      position: fixed;
+      right: -400px;
+      top: 0;
+      width: 400px;
+      height: 100%;
+      background: #0c2d3f; /* Alpii Dark Blue */
+      color: white;
+      z-index: 2000;
+      padding: 80px 30px;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    }
+
+    #side-panel.active { right: 0; }
+    
+    .close-btn { 
+      cursor: pointer; 
+      color: #7fb1c3; 
+      font-weight: bold; 
+      position: absolute; 
+      top: 30px; 
+      right: 30px; 
+    }
+
+    .side-panel-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-bespoke {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #7fb1c3;
+      color: #0c2d3f;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      #side-panel { width: 100%; right: -100%; }
+    }
+  </style>
 </head>
 
 <body class="index-page">
 
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container position-relative d-flex align-items-center justify-content-between">
-
       <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-       <img src="assets/img/favicon.png" alt="">
+        <img src="assets/img/favicon.png" alt="">
         <h1 class="sitename">Alpii Travel</h1>
       </a>
-
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="index.html" class="active">Home</a></li>
@@ -54,80 +95,54 @@
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-
       <a class="btn-getstarted" href="contact.html">Contact Us</a>
-
     </div>
   </header>
-    <!-- JavaScript to load the header -->
 
   <main class="main">
 
-    <!-- Travel Hero Section -->
     <section id="travel-hero" class="travel-hero carousel section dark-background text-center">
-         <video autoplay muted loop plays-inline class="back-video">
-            <source src="assets/video/video-1.mp4" type="video/mp4">
-          </video>
+      <video muted autoplay muted class="back-video" id="heroVideo">
+        <source src="assets/video/video-1.mp4" type="video/mp4">
+      </video>
       <div class="container">
-
         <div class="row justify-content-center">
-        
-            <div class="col-lg-8 text-center">
-              <h1>Europe Curated by Alpii</h1>
-              <p class="lead">Alpii Group curates exceptional European experiences through a trusted network of premium local partners, guided by Swiss-led standards of quality, reliability, and precision.</p>
-
-            </div>
+          <div class="col-lg-8 text-center">
+            <h1 id="heroTitle">The Gateway to Europe</h1>
+            <p id="heroSubtext" class="lead">Bespoke experiences delivered with Swiss precision across Europe’s most iconic cities.</p>
+          </div>
         </div>
-      
+      </div>
+    </section>
 
-    </section><!-- /Travel Hero Section -->
-
-    <!-- Why Us Section -->
     <section id="why-us" class="why-us section">
-
       <div class="container">
-
-        <!-- Main Content Grid -->
         <div class="why-choose-wrapper">
           <div class="section-header text-center">
-       
-            <!-- About Section -->
-            
-              <div class="about-block">
-                <div class="about-header">
-                  <span class="section-badge">About Us</span>
-                  <h3>The Alpii Group</h3>
-                </div>
-                <div class="about-content">
-                  <p>Alpii Group is a Switzerland-based travel company operating as both a tour operator and a curated marketplace for premium European experiences.
-                    <br>
-
-                    We design, manage, and deliver experiences across Europe through a carefully selected network of local partners, combining deep regional expertise with Swiss-led standards of quality, reliability, and operational precision.</p>
-                  
-                  </div>
-                </div>
+            <div class="about-block">
+              <div class="about-header">
+                <span class="section-badge">About Us</span>
+                <h3>The Alpii Group</h3>
               </div>
-            
+              <div class="about-content">
+                <p>Alpii Group is a Switzerland-based travel company operating as both a tour operator and a curated marketplace for premium European experiences.</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-
-          
-        </div><!-- End Main Content Grid -->
-
-        <!-- Why Choose Us Section -->
         <div class="why-choose-wrapper">
           <div class="section-header text-center">
             <span class="section-badge">Why Choose Us</span>
             <h3>What Makes Us Different</h3>
-            <p>We bring you a really nice Europe Experience</p>
           </div>
-
           <div class="features-container">
             <div class="row g-4">
 
        
 
               <div class="col-lg-4 col-md-6">
-                <div class="feature-box">
+                <div class="feature-box fade-up">
                   <div class="feature-icon-wrapper">
                     <div class="feature-icon">
                       <i class="bi bi-heart-fill"></i>
@@ -139,7 +154,7 @@
               </div>
 
               <div class="col-lg-4 col-md-6">
-                <div class="feature-box">
+                <div class="feature-box fade-up">
                   <div class="feature-icon-wrapper">
                     <div class="feature-icon">
                       <i class="bi bi-lightning-charge-fill"></i>
@@ -151,7 +166,7 @@
               </div>
 
               <div class="col-lg-4 col-md-6">
-                <div class="feature-box">
+                <div class="feature-box fade-up">
                   <div class="feature-icon-wrapper">
                     <div class="feature-icon">
                       <i class="bi bi-globe-americas"></i>
@@ -164,114 +179,27 @@
 
             </div>
           </div>
-        </div><!-- End Why Choose Us Section -->
-
-
-        
+        </div>
       </div>
+    </section>
 
-    </section><!-- /Why Us Section -->
-
-  
-    <!-- Featured Tours Section -->
-    <section id="featured-tours" class="featured-tours section">
-
-      <!-- Section Title -->
-      <div class="container section-title">
+    <section id="map-explore" class="section">
+      <div class="container">
+       <div class="container section-title">
         <h2>Featured Tours</h2>
         <div><span>Check Our</span> <span class="description-title">Featured Tours</span></div>
-      </div><!-- End Section Title -->
-
-      <div class="container">
-
-        <div class="row g-4">
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="destination-card">
-              <div class="destination-overlay">
-                <a class="glightbox" data-gallery="images-gallery" href=" assets/img/travel/tour-12.webp">
-                    <img src="assets/img/travel/tour-12.webp" alt="Mountain Adventure" class="img-fluid" loading="lazy">
-                      <div class="card-overlay">
-                      </div>
-                </a>
-              </div>
-            </div>
-          </div><!-- End Tour Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="destination-card">
-              <div class="destination-overlay">
-                <a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-5.webp">
-                    <img src="assets/img/gallery/gallery-5.webp" alt="Mountain Adventure" class="img-fluid" loading="lazy">
-                      <div class="card-overlay">
-                      </div>
-                </a>
-              </div>
-            </div>
-          </div><!-- End Tour Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="destination-card">
-              <div class="destination-overlay">
-                <a class="glightbox" data-gallery="images-gallery" href="assets/img/travel/tour-15.webp">
-                    <img src="assets/img/travel/tour-15.webp" alt="Mountain Adventure" class="img-fluid" loading="lazy">
-                      <div class="card-overlay">
-                      </div>
-                </a>
-              </div>
-            </div>
-          </div><!-- End Tour Item -->
-
-               <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="destination-card">
-              <div class="destination-overlay">
-                <a class="glightbox" data-gallery="images-gallery" href=" assets/img/travel/tour-12.webp">
-                    <img src="assets/img/travel/tour-12.webp" alt="Mountain Adventure" class="img-fluid" loading="lazy">
-                      <div class="card-overlay">
-                      </div>
-                </a>
-              </div>
-            </div>
-          </div><!-- End Tour Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="destination-card">
-              <div class="destination-overlay">
-                <a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-5.webp">
-                    <img src="assets/img/gallery/gallery-5.webp" alt="Mountain Adventure" class="img-fluid" loading="lazy">
-                      <div class="card-overlay">
-                      </div>
-                </a>
-              </div>
-            </div>
-          </div><!-- End Tour Item -->
-
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="destination-card">
-              <div class="destination-overlay">
-                <a class="glightbox" data-gallery="images-gallery" href="assets/img/travel/tour-15.webp">
-                    <img src="assets/img/travel/tour-15.webp" alt="Mountain Adventure" class="img-fluid" loading="lazy">
-                      <div class="card-overlay">
-                      </div>
-                </a>
-              </div>
-            </div>
-          </div><!-- End Tour Item -->
-
-     
-
-
-
-        </div>
-
-        <div class="text-center mt-5">
-          <a href="gallery.html" class="discover-more-btn">Discover More Adventures</a>
-        </div>
-
       </div>
+        <div id="map-container"></div>
+      </div>
+    </section>
 
-    </section><!-- /Featured Tours Section -->
-
-    <!-- Testimonials Home Section -->
+    <div id="side-panel">
+      <span class="close-btn" onclick="closePanel()">✕ CLOSE</span>
+      <h2 id="city-name" style="margin-top: 20px;">City Name</h2>
+      <img id="city-img" class="side-panel-img" src="" alt="City">
+      <p id="city-desc"></p>
+      <a href="contact.html" class="btn-getstarted">Request a Bespoke Itinerary</a>
+    </div>
     <section id="testimonials-home" class="testimonials-home section">
 
       <!-- Section Title -->
@@ -498,40 +426,50 @@
 
     </section><!-- /Call To Action Section -->
 
+
+
   </main>
 
-<div id="footer-placeholder">
+  <div id="footer-placeholder"></div>
 
-    <main>
-         <script>
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('footer-placeholder').innerHTML = html;
-            });
-    </script>
-    </main>
-  </div>
-
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Preloader -->
-  <div id="preloader"></div>
-
-  <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Main JS File -->
+  <script>
+    function closePanel() {
+      document.getElementById('side-panel').classList.remove('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const map = L.map('map-container', { scrollWheelZoom: false }).setView([48.8566, 10.3522], 4);
+      
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      const cities = [
+        { name: "Paris", coords: [48.8566, 2.3522], desc: "The height of luxury fashion and culture.", img: "assets/img/gallery/gallery-1.webp" },
+        { name: "Bern", coords: [46.9480, 7.4474], desc: "Swiss precision meets alpine serenity.", img: "assets/img/gallery/gallery-2.webp" },
+        { name: "Berlin", coords: [52.5200, 13.4050], desc: "Modern history and elite experiences.", img: "assets/img/gallery/gallery-3.webp" },
+        { name: "Zurich", coords: [47.3769, 8.5417], desc: "Financial heart and lakeside luxury.", img: "assets/img/gallery/gallery-4.webp" }
+      ];
+
+      cities.forEach(city => {
+        const marker = L.marker(city.coords).addTo(map);
+        marker.on('click', () => {
+          document.getElementById('city-name').innerText = city.name;
+          document.getElementById('city-desc').innerText = city.desc;
+          document.getElementById('city-img').src = city.img;
+          document.getElementById('side-panel').classList.add('active');
+        });
+      });
+    });
+
+    // Load Footer
+    fetch('footer.html').then(r => r.text()).then(h => document.getElementById('footer-placeholder').innerHTML = h);
+  </script>
+
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/contact.js"></script>
-
 </body>
-
 </html>
