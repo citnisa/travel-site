@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Alpii Switzerland</title>
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Poppins:wght@300;400;600&family=Raleway:wght@300;700&display=swap" rel="stylesheet">
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    /* --- Map & Side Panel Custom Styles --- */
+    #map-container {
+      height: 600px;
+      width: 100%;
+      border-radius: 20px;
+      z-index: 1;
+    }
+
+    #side-panel {
+      position: fixed;
+      right: -400px;
+      top: 0;
+      width: 400px;
+      height: 100%;
+      background: #0c2d3f; /* Alpii Dark Blue */
+      color: white;
+      z-index: 2000;
+      padding: 80px 30px;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    }
+
+    #side-panel.active { right: 0; }
+    
+    .close-btn { 
+      cursor: pointer; 
+      color: #7fb1c3; 
+      font-weight: bold; 
+      position: absolute; 
+      top: 30px; 
+      right: 30px; 
+    }
+
+    .side-panel-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-bespoke {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #7fb1c3;
+      color: #0c2d3f;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      #side-panel { width: 100%; right: -100%; }
+    }
+  </style>
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container position-relative d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <img src="assets/img/favicon.png" alt="">
+        <h1 class="sitename">Alpii Travel</h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+      <a class="btn-getstarted" href="contact.html">Contact Us</a>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <section id="travel-hero" class="travel-hero carousel section dark-background text-center">
+      <video muted autoplay muted class="back-video" id="heroVideo">
+        <source src="assets/video/video-1.mp4" type="video/mp4">
+      </video>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <h1 id="heroTitle">The Gateway to Europe</h1>
+            <p id="heroSubtext" class="lead">Bespoke experiences delivered with Swiss precision across Europe’s most iconic cities.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why-us" class="why-us section">
+      <div class="container">
+        <div class="why-choose-wrapper">
+          <div class="section-header text-center">
+            <div class="about-block">
+              <div class="about-header">
+                <span class="section-badge">About Us</span>
+                <h3>The Alpii Group</h3>
+              </div>
+              <div class="about-content">
+                <p>Alpii Group is a Switzerland-based travel company operating as both a tour operator and a curated marketplace for premium European experiences.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="why-choose-wrapper">
+          <div class="section-header text-center">
+            <span class="section-badge">Why Choose Us</span>
+            <h3>What Makes Us Different</h3>
+          </div>
+          <div class="features-container">
+            <div class="row g-4">
+
+       
+
+              <div class="col-lg-4 col-md-6">
+                <div class="feature-box fade-up">
+                  <div class="feature-icon-wrapper">
+                    <div class="feature-icon">
+                      <i class="bi bi-heart-fill"></i>
+                    </div>
+                  </div>
+                  <h4>Swiss Standards</h4>
+                 <p>Reliability, precision, and uncompromising quality defined by our Swiss headquarters.</p>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-6">
+                <div class="feature-box fade-up">
+                  <div class="feature-icon-wrapper">
+                    <div class="feature-icon">
+                      <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                  </div>
+                  <h4>Local Soul</h4>
+                  <p>Experiences crafted by trusted local experts who know their cities intimately.</p>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-6">
+                <div class="feature-box fade-up">
+                  <div class="feature-icon-wrapper">
+                    <div class="feature-icon">
+                      <i class="bi bi-globe-americas"></i>
+                    </div>
+                  </div>
+                  <h4>Global Reach</h4>
+                  <p>A curated network across Europe’s major cultural and lifestyle destinations.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="map-explore" class="section">
+      <div class="container">
+       <div class="container section-title">
+        <h2>Featured Tours</h2>
+        <div><span>Check Our</span> <span class="description-title">Featured Tours</span></div>
+      </div>
+        <div id="map-container"></div>
+      </div>
+    </section>
+
+    <div id="side-panel">
+      <span class="close-btn" onclick="closePanel()">✕ CLOSE</span>
+      <h2 id="city-name" style="margin-top: 20px;">City Name</h2>
+      <img id="city-img" class="side-panel-img" src="" alt="City">
+      <p id="city-desc"></p>
+      <a href="contact.html" class="btn-getstarted">Request a Bespoke Itinerary</a>
+    </div>
+    <section id="testimonials-home" class="testimonials-home section">
+
+      <!-- Section Title -->
+      <div class="container section-title">
+        <h2>Testimonials</h2>
+        <div><span>What Our Customers</span> <span class="description-title">Are Saying</span></div>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="swiper init-swiper">
+          <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+              "speed": 600,
+              "autoplay": {
+                "delay": 5000
+              },
+              "slidesPerView": "auto",
+              "pagination": {
+                "el": ".swiper-pagination",
+                "type": "bullets",
+                "clickable": true
+              }
+            }
+          </script>
+          <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="row gy-4 justify-content-center">
+                  <div class="col-lg-6">
+                    <div class="testimonial-content">
+                      <p>
+                        <i class="bi bi-quote quote-icon-left"></i>
+                        <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.</span>
+                        <i class="bi bi-quote quote-icon-right"></i>
+                      </p>
+                      <h3>Saul Goodman</h3>
+                      <h4>Ceo &amp; Founder</h4>
+                      <div class="stars">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 text-center">
+                    <img src="assets/img/person/person-m-9.webp" class="img-fluid testimonial-img" alt="">
+                  </div>
+                </div>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="row gy-4 justify-content-center">
+                  <div class="col-lg-6">
+                    <div class="testimonial-content">
+                      <p>
+                        <i class="bi bi-quote quote-icon-left"></i>
+                        <span>Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.</span>
+                        <i class="bi bi-quote quote-icon-right"></i>
+                      </p>
+                      <h3>Sara Wilsson</h3>
+                      <h4>Designer</h4>
+                      <div class="stars">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 text-center">
+                    <img src="assets/img/person/person-f-5.webp" class="img-fluid testimonial-img" alt="">
+                  </div>
+                </div>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="row gy-4 justify-content-center">
+                  <div class="col-lg-6">
+                    <div class="testimonial-content">
+                      <p>
+                        <i class="bi bi-quote quote-icon-left"></i>
+                        <span>Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.</span>
+                        <i class="bi bi-quote quote-icon-right"></i>
+                      </p>
+                      <h3>Jena Karlis</h3>
+                      <h4>Store Owner</h4>
+                      <div class="stars">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 text-center">
+                    <img src="assets/img/person/person-f-12.webp" class="img-fluid testimonial-img" alt="">
+                  </div>
+                </div>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="row gy-4 justify-content-center">
+                  <div class="col-lg-6">
+                    <div class="testimonial-content">
+                      <p>
+                        <i class="bi bi-quote quote-icon-left"></i>
+                        <span>Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.</span>
+                        <i class="bi bi-quote quote-icon-right"></i>
+                      </p>
+                      <h3>John Larson</h3>
+                      <h4>Entrepreneur</h4>
+                      <div class="stars">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 text-center">
+                    <img src="assets/img/person/person-m-12.webp" class="img-fluid testimonial-img" alt="">
+                  </div>
+                </div>
+              </div>
+            </div><!-- End testimonial item -->
+
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+
+    </section><!-- /Testimonials Home Section -->
+
+    <!-- Call To Action Section -->
+    <section id="call-to-action" class="call-to-action section">
+
+      <div class="container">
+
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <h2>Ready to Start Your Next Adventure?</h2>
+            <p>Discover breathtaking destinations, create unforgettable memories, and explore the world with our expertly crafted travel packages. From exotic beaches to mountain peaks, your perfect journey awaits.</p>
+            <div class="cta-buttons">
+              <a href="destinations.html" class="btn-primary">Explore Destinations</a>
+              <a href="contact.html" class="btn-secondary">Plan Your Trip</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-lg-3 col-md-6">
+            <div class="feature-item text-center">
+              <div class="icon">
+                <i class="bi bi-globe"></i>
+              </div>
+              <h4>50+ Destinations</h4>
+              <p>Explore amazing destinations across all continents</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="feature-item text-center">
+              <div class="icon">
+                <i class="bi bi-shield-check"></i>
+              </div>
+              <h4>Safe &amp; Secure</h4>
+              <p>Travel with confidence with our safety guarantee</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="feature-item text-center">
+              <div class="icon">
+                <i class="bi bi-headset"></i>
+              </div>
+              <h4>24/7 Support</h4>
+              <p>Round-the-clock assistance whenever you need it</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="feature-item text-center">
+              <div class="icon">
+                <i class="bi bi-percent"></i>
+              </div>
+              <h4>Best Prices</h4>
+              <p>Competitive rates with exclusive deals and offers</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-section">
+          <div class="row text-center">
+            <div class="col-lg-3 col-md-6">
+              <div class="stat-item">
+                <span class="stat-number purecounter" data-purecounter-start="0" data-purecounter-end="15000" data-purecounter-duration="2"></span>
+                <span class="stat-label">Happy Travelers</span>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="stat-item">
+                <span class="stat-number purecounter" data-purecounter-start="0" data-purecounter-end="127" data-purecounter-duration="2"></span>
+                <span class="stat-label">Countries Covered</span>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="stat-item">
+                <span class="stat-number purecounter" data-purecounter-start="0" data-purecounter-end="98" data-purecounter-duration="2"></span>
+                <span class="stat-label">Satisfaction Rate</span>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="stat-item">
+                <span class="stat-number purecounter" data-purecounter-start="0" data-purecounter-end="12" data-purecounter-duration="2"></span>
+                <span class="stat-label">Years Experience</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Call To Action Section -->
+
+
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    function closePanel() {
+      document.getElementById('side-panel').classList.remove('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const map = L.map('map-container', { scrollWheelZoom: false }).setView([48.8566, 10.3522], 4);
+      
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      const cities = [
+        { name: "Paris", coords: [48.8566, 2.3522], desc: "The height of luxury fashion and culture.", img: "assets/img/gallery/gallery-1.webp" },
+        { name: "Bern", coords: [46.9480, 7.4474], desc: "Swiss precision meets alpine serenity.", img: "assets/img/gallery/gallery-2.webp" },
+        { name: "Berlin", coords: [52.5200, 13.4050], desc: "Modern history and elite experiences.", img: "assets/img/gallery/gallery-3.webp" },
+        { name: "Zurich", coords: [47.3769, 8.5417], desc: "Financial heart and lakeside luxury.", img: "assets/img/gallery/gallery-4.webp" }
+      ];
+
+      cities.forEach(city => {
+        const marker = L.marker(city.coords).addTo(map);
+        marker.on('click', () => {
+          document.getElementById('city-name').innerText = city.name;
+          document.getElementById('city-desc').innerText = city.desc;
+          document.getElementById('city-img').src = city.img;
+          document.getElementById('side-panel').classList.add('active');
+        });
+      });
+    });
+
+    // Load Footer
+    fetch('footer.html').then(r => r.text()).then(h => document.getElementById('footer-placeholder').innerHTML = h);
+  </script>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
